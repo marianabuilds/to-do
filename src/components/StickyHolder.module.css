@@ -1,7 +1,7 @@
 .holder {
   position: fixed;
-  right: 24px;
-  bottom: 130px;
+  left: 24px;
+  bottom: 24px;
   width: 120px;
   display: flex;
   flex-direction: column;

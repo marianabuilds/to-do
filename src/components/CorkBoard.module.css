@@ -6,7 +6,7 @@
   overflow: hidden;
   background-color: #c4a06e;
   background-image: url('/cork-texture.jpg');
-  background-size: cover;
+  background-size: 200% auto;
   background-position: right center;
   border: 2px solid rgba(120, 90, 60, 0.5);
   border-radius: 4px;
