@@ -14,8 +14,7 @@ import { getBoardPosition } from './utils/boardPosition';
 import { useBoardState } from './hooks/useBoardState';
 import type { DragData } from './types';
 import { CorkBoard } from './components/CorkBoard';
-import { StickyHolder } from './components/StickyHolder';
-import { TrashCan } from './components/TrashCan';
+import { Toolbox } from './components/Toolbox';
 import { SupplyNote } from './components/StickyNote';
 import styles from './App.module.css';
 
@@ -23,8 +22,9 @@ export default function App() {
   const boardRef = useRef<HTMLDivElement>(null);
   const [focusNoteId, setFocusNoteId] = useState<string | null>(null);
   const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [toolboxOpen, setToolboxOpen] = useState(false);
 
-  const { notes, trashedCount, addNote, moveNote, updateNoteText, removeNote } =
+  const { notes, trashedCount, addNote, moveNote, updateNoteText, removeNote, resizeNote } =
     useBoardState();
 
   const sensors = useSensors(
@@ -36,6 +36,8 @@ export default function App() {
     if (data?.type === 'template') {
       setActiveColor(data.color);
     }
+    // Close wheel so the board is fully visible during drag
+    setToolboxOpen(false);
   }, []);
 
   const handleDragEnd = useCallback(
@@ -87,17 +89,24 @@ export default function App() {
         <div className={styles.workspace}>
           <CorkBoard
             ref={boardRef}
+            boardRef={boardRef}
             notes={notes}
             focusNoteId={focusNoteId}
             onTextChange={updateNoteText}
             onNoteFocused={(id) => {
               if (focusNoteId === id) setFocusNoteId(null);
             }}
+            onResizeNote={(id, w, h, x, y) => resizeNote(id, w, h, x, y)}
           />
         </div>
-        <StickyHolder />
-        <TrashCan trashedCount={trashedCount} />
+
+        <Toolbox
+          trashedCount={trashedCount}
+          isOpen={toolboxOpen}
+          onToggle={() => setToolboxOpen((o) => !o)}
+        />
       </div>
+
       <DragOverlay dropAnimation={null}>
         {activeColor ? <SupplyNote color={activeColor} /> : null}
       </DragOverlay>

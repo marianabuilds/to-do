@@ -2,6 +2,8 @@ export const BOARD_WIDTH = 846;
 export const BOARD_HEIGHT = 600;
 export const NOTE_WIDTH = 150;
 export const NOTE_HEIGHT = 200;
+export const NOTE_MIN_WIDTH = 80;
+export const NOTE_MIN_HEIGHT = 80;
 
 export const DND_IDS = {
   corkBoard: 'cork-board',

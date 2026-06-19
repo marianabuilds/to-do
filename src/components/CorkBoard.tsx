@@ -10,10 +10,15 @@ type CorkBoardProps = {
   focusNoteId: string | null;
   onTextChange: (noteId: string, text: string) => void;
   onNoteFocused: (noteId: string) => void;
+  onResizeNote: (noteId: string, w: number, h: number, x?: number, y?: number) => void;
+  boardRef: React.RefObject<HTMLDivElement | null>;
 };
 
 export const CorkBoard = forwardRef<HTMLDivElement, CorkBoardProps>(
-  function CorkBoard({ notes, focusNoteId, onTextChange, onNoteFocused }, ref) {
+  function CorkBoard(
+    { notes, focusNoteId, onTextChange, onNoteFocused, onResizeNote, boardRef },
+    ref,
+  ) {
     const { setNodeRef, isOver } = useDroppable({ id: DND_IDS.corkBoard });
 
     const setRefs = (node: HTMLDivElement | null) => {
@@ -32,6 +37,8 @@ export const CorkBoard = forwardRef<HTMLDivElement, CorkBoardProps>(
             autoFocus={note.id === focusNoteId}
             onTextChange={(text) => onTextChange(note.id, text)}
             onFocused={() => onNoteFocused(note.id)}
+            onResize={(w, h, x, y) => onResizeNote(note.id, w, h, x, y)}
+            boardRef={boardRef}
           />
         ))}
       </div>

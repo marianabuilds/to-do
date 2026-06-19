@@ -49,5 +49,32 @@ export function useBoardState() {
     [setNotes, setTrashedCount],
   );
 
-  return { notes, trashedCount, addNote, moveNote, updateNoteText, removeNote };
+  const resizeNote = useCallback(
+    (noteId: string, width: number, height: number, x?: number, y?: number) => {
+      setNotes((prev) =>
+        prev.map((n) =>
+          n.id === noteId
+            ? {
+                ...n,
+                width,
+                height,
+                ...(x !== undefined ? { x } : {}),
+                ...(y !== undefined ? { y } : {}),
+              }
+            : n,
+        ),
+      );
+    },
+    [setNotes],
+  );
+
+  return {
+    notes,
+    trashedCount,
+    addNote,
+    moveNote,
+    updateNoteText,
+    removeNote,
+    resizeNote,
+  };
 }
