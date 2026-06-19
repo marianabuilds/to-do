@@ -1,0 +1,20 @@
+.board {
+  position: relative;
+  width: 846px;
+  height: 600px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background-color: #c4a06e;
+  background-image: url('/cork-texture.jpg');
+  background-size: cover;
+  background-position: right center;
+  border: 2px solid rgba(120, 90, 60, 0.5);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.board[data-over='true'] {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
