@@ -9,7 +9,7 @@ type TrashCanProps = {
 export function TrashCan({ trashedCount }: TrashCanProps) {
   const { setNodeRef, isOver } = useDroppable({ id: DND_IDS.trash });
 
-  const src = trashedCount > 0 ? '/trash-full.png' : '/trash-empty.svg';
+  const src = trashedCount > 0 ? '/trash-full.svg' : '/trash-empty.svg';
 
   return (
     <div

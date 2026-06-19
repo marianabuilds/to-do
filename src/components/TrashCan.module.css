@@ -13,6 +13,7 @@
   width: 100%;
   height: auto;
   display: block;
+  mix-blend-mode: multiply;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
   transition: filter 0.15s ease;
 }

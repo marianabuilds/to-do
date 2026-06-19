@@ -109,19 +109,13 @@
   z-index: 100;
 }
 
-/* ── Resize handles ── */
+/* ── Resize handles — invisible, cursor only ── */
 .resizeHandle {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background: rgba(0, 0, 0, 0.22);
-  border-radius: 2px;
+  width: 14px;
+  height: 14px;
+  background: transparent;
   z-index: 10;
-  transition: background 0.15s ease;
-}
-
-.resizeHandle:hover {
-  background: rgba(0, 0, 0, 0.45);
 }
 
 .resizeSE { bottom: 3px; right: 3px; cursor: se-resize; }

@@ -5,7 +5,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  closestCenter,
+  pointerWithin,
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core';
@@ -15,7 +15,8 @@ import { useBoardState } from './hooks/useBoardState';
 import type { DragData } from './types';
 import { CorkBoard } from './components/CorkBoard';
 import { Toolbox } from './components/Toolbox';
-import { SupplyNote } from './components/StickyNote';
+import { TrashCan } from './components/TrashCan';
+import { SupplyNotePreview } from './components/StickyNote';
 import styles from './App.module.css';
 
 export default function App() {
@@ -24,8 +25,17 @@ export default function App() {
   const [activeColor, setActiveColor] = useState<string | null>(null);
   const [toolboxOpen, setToolboxOpen] = useState(false);
 
-  const { notes, trashedCount, addNote, moveNote, updateNoteText, removeNote, resizeNote } =
-    useBoardState();
+  const {
+    notes,
+    trashedCount,
+    boardSize,
+    addNote,
+    moveNote,
+    updateNoteText,
+    removeNote,
+    resizeNote,
+    resizeBoard,
+  } = useBoardState();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -36,12 +46,11 @@ export default function App() {
     if (data?.type === 'template') {
       setActiveColor(data.color);
     }
-    // Close wheel so the board is fully visible during drag
-    setToolboxOpen(false);
   }, []);
 
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
+      setToolboxOpen(false);
       const { active, over } = event;
       const data = active.data.current as DragData | undefined;
       const boardEl = boardRef.current;
@@ -81,7 +90,7 @@ export default function App() {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={pointerWithin}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
@@ -90,6 +99,8 @@ export default function App() {
           <CorkBoard
             ref={boardRef}
             boardRef={boardRef}
+            boardSize={boardSize}
+            onResizeBoard={resizeBoard}
             notes={notes}
             focusNoteId={focusNoteId}
             onTextChange={updateNoteText}
@@ -101,14 +112,14 @@ export default function App() {
         </div>
 
         <Toolbox
-          trashedCount={trashedCount}
           isOpen={toolboxOpen}
           onToggle={() => setToolboxOpen((o) => !o)}
         />
+        <TrashCan trashedCount={trashedCount} />
       </div>
 
       <DragOverlay dropAnimation={null}>
-        {activeColor ? <SupplyNote color={activeColor} /> : null}
+        {activeColor ? <SupplyNotePreview color={activeColor} /> : null}
       </DragOverlay>
     </DndContext>
   );

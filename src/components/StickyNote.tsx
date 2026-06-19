@@ -77,6 +77,18 @@ function startResize(
   el.addEventListener('pointerup', onUp);
 }
 
+export function SupplyNotePreview({ color }: { color: string }) {
+  const headerColor = darkenHex(color);
+  return (
+    <div
+      className={`${styles.note} ${styles.supplyNote}`}
+      style={{ backgroundColor: color }}
+    >
+      <div className={styles.header} style={{ backgroundColor: headerColor }} />
+    </div>
+  );
+}
+
 type StickyNoteProps =
   | { mode: 'supply'; color: string }
   | {
@@ -116,10 +128,7 @@ export function SupplyNote({ color }: { color: string }) {
       {...listeners}
       {...attributes}
     >
-      <div className={styles.header} style={{ backgroundColor: headerColor }}>
-        <span className={styles.headerIcon}>▢</span>
-        <span className={styles.headerIcon}>◢ ▢</span>
-      </div>
+      <div className={styles.header} style={{ backgroundColor: headerColor }} />
     </div>
   );
 }
@@ -170,7 +179,6 @@ function BoardNote({
         backgroundColor: note.color,
         transform: transform ? CSS.Translate.toString(transform) : undefined,
         zIndex: isDragging ? 100 : 1,
-        opacity: isDragging ? 0.45 : 1,
       } as React.CSSProperties}
       {...attributes}
     >
@@ -178,10 +186,7 @@ function BoardNote({
         className={styles.header}
         style={{ backgroundColor: headerColor }}
         {...listeners}
-      >
-        <span className={styles.headerIcon}>▢</span>
-        <span className={styles.headerIcon}>◢ ▢</span>
-      </div>
+      />
       <div className={styles.body}>
         <textarea
           ref={textareaRef}

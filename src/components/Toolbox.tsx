@@ -1,11 +1,11 @@
-import { useDraggable, useDroppable } from '@dnd-kit/core';
-import { STICKY_COLORS, DND_IDS } from '../constants';
+import { useDraggable } from '@dnd-kit/core';
+import { STICKY_COLORS } from '../constants';
 import styles from './Toolbox.module.css';
 
 // Geometry
-const RADIUS = 90;       // px, from trigger center to item center
-const ITEM_SIZE = 44;    // px
-const TRIGGER_SIZE = 48; // px
+const RADIUS = 90;
+const ITEM_SIZE = 44;
+const TRIGGER_SIZE = 48;
 
 function wheelPos(index: number, total: number) {
   // Fan from 90° (straight up, index 0) → 0° (straight right, last index)
@@ -48,61 +48,23 @@ function StickyItem({
   );
 }
 
-function TrashItem({
-  pos,
-  trashedCount,
-  delay,
-}: {
-  pos: { left: number; bottom: number };
-  trashedCount: number;
-  delay: number;
-}) {
-  const { setNodeRef, isOver } = useDroppable({ id: DND_IDS.trash });
-
-  return (
-    <div
-      ref={setNodeRef}
-      className={`${styles.item} ${styles.trashItem} ${isOver ? styles.over : ''}`}
-      style={{ left: pos.left, bottom: pos.bottom, animationDelay: `${delay}ms` }}
-    >
-      <img
-        src={trashedCount > 0 ? '/trash-full.png' : '/trash-empty.svg'}
-        alt="Trash"
-        className={styles.trashImg}
-      />
-    </div>
-  );
-}
-
 interface ToolboxProps {
-  trashedCount: number;
   isOpen: boolean;
   onToggle: () => void;
 }
 
-export function Toolbox({ trashedCount, isOpen, onToggle }: ToolboxProps) {
-  type Entry = { kind: 'sticky'; color: string } | { kind: 'trash' };
-
-  const entries: Entry[] = [
-    ...STICKY_COLORS.map((color) => ({ kind: 'sticky' as const, color })),
-    { kind: 'trash' },
-  ];
-
+export function Toolbox({ isOpen, onToggle }: ToolboxProps) {
   return (
     <div className={styles.toolbox}>
       {isOpen &&
-        entries.map((entry, i) => {
-          const pos = wheelPos(i, entries.length);
-          const delay = i * 18;
-          if (entry.kind === 'trash') {
-            return (
-              <TrashItem key="trash" pos={pos} trashedCount={trashedCount} delay={delay} />
-            );
-          }
-          return (
-            <StickyItem key={entry.color} color={entry.color} pos={pos} delay={delay} />
-          );
-        })}
+        STICKY_COLORS.map((color, i) => (
+          <StickyItem
+            key={color}
+            color={color}
+            pos={wheelPos(i, STICKY_COLORS.length)}
+            delay={i * 20}
+          />
+        ))}
 
       <button
         className={`${styles.trigger} ${isOpen ? styles.triggerOpen : ''}`}

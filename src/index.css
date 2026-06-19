@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html {
+  background-color: #2a3e2a;
+}
+
 html,
 body,
 #root {

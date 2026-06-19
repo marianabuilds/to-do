@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
-import { STORAGE_KEYS } from '../constants';
+import { STORAGE_KEYS, BOARD_WIDTH, BOARD_HEIGHT } from '../constants';
 import type { Note, NewNoteInput } from '../types';
 
 function generateId() {
@@ -12,6 +12,10 @@ export function useBoardState() {
   const [trashedCount, setTrashedCount] = useLocalStorage<number>(
     STORAGE_KEYS.trashedCount,
     0,
+  );
+  const [boardSize, setBoardSize] = useLocalStorage<{ width: number; height: number }>(
+    STORAGE_KEYS.board,
+    { width: BOARD_WIDTH, height: BOARD_HEIGHT },
   );
 
   const addNote = useCallback(
@@ -68,13 +72,20 @@ export function useBoardState() {
     [setNotes],
   );
 
+  const resizeBoard = useCallback(
+    (width: number, height: number) => setBoardSize({ width, height }),
+    [setBoardSize],
+  );
+
   return {
     notes,
     trashedCount,
+    boardSize,
     addNote,
     moveNote,
     updateNoteText,
     removeNote,
     resizeNote,
+    resizeBoard,
   };
 }
